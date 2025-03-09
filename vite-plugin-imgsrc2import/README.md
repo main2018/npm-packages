@@ -9,7 +9,8 @@
 
 # vite-plugin-imgsrc2import
 
-🍣 A vite plugin to convert Svelte img src to import.
+🍣 A vite plugin to convert Svelte img src to import. 
+🚀🚀🚀 You don't have to manually import the resource "import logo from './assets/logo.png'" and write "src={logo}", You just write 'src="./assets/logo.png"' as usual.
 
 ## covert
 before convert:
