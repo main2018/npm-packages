@@ -1,0 +1,44 @@
+{
+  "name": "vite-plugin-imgsrc2import",
+  "version": "0.0.2",
+  "private": false,
+  "description": "vite plugin to convert svelte img src to import",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "pub": "npm run build && npm version patch --no-git-tag-version && npm publish --registry=https://registry.npmjs.org/",
+    "postpub": "node ./postpub.js",
+    "postpub1": "git add . && git commit -am 'update' && git push"
+  },
+  "keywords": [
+    "vite",
+    "plugin",
+    "svelte",
+    "img",
+    "src",
+    "import",
+    "rollup",
+    "vite-plugin",
+    "vite-plugin-svelte",
+    "vite-plugin-imgsrc2import",
+    "imgsrc2import",
+    "convert"
+  ],
+  "author": {
+    "name": "椰子.Zz",
+    "email": "375277023@qq.com"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.35.0",
+    "rollup-plugin-clear": "^2.0.7",
+    "vite": "^6.0.6"
+  }
+}
