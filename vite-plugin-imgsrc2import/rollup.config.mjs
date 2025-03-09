@@ -1,22 +1,34 @@
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve'; // 解析第三方模块
+import commonjs from '@rollup/plugin-commonjs'; // 将 CommonJS 模块转换为 ES 模块
 // import typescript from '@rollup/plugin-typescript';
+import babel from "@rollup/plugin-babel";
 import terser from '@rollup/plugin-terser';
 import clear from 'rollup-plugin-clear';
 
 export default {
+  mode: 'production',
   input: 'src/index.js', // 入口文件
-  output: {
-    
-    file: 'dist/index.js', // 输出文件
-    format: 'esm', // 输出格式为 ES 模块
-    sourcemap: false, // 生成 sourcemap
-  },
+  output: [
+    {
+      file: 'dist/index.mjs', // 输出 ESM 格式
+      format: 'esm', // ES 模块格式
+      sourcemap: false, // 生成 sourcemap
+    },
+    {
+      file: 'dist/index.cjs', // 输出 CJS 格式
+      format: 'cjs', // CommonJS 格式
+      sourcemap: false, // 生成 sourcemap
+    },
+  ],
   plugins: [
     clear({ targets: ['dist'] }),
     resolve(), // 解析第三方模块
     commonjs(), // 将 CommonJS 模块转换为 ES 模块
     // typescript(), // 支持 TypeScript
+    babel({
+      babelHelpers: "bundled",
+      exclude: "node_modules/**",
+    }),
     terser({
       format: {
         comments: false, // 移除注释

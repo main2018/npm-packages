@@ -1,11 +1,20 @@
 {
   "name": "vite-plugin-imgsrc2import",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "private": false,
+  "license": "MIT",
   "description": "vite plugin to convert svelte img src to import",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./*": "./dist/*"
+  },
   "scripts": {
+    "clean": "rm -rf dist",
     "build": "rollup -c",
     "pub": "npm run build && npm version patch --no-git-tag-version && npm publish --registry=https://registry.npmjs.org/",
     "postpub": "node ./postpub.js",
@@ -14,6 +23,7 @@
   "keywords": [
     "vite",
     "plugin",
+    "vite-plugin",
     "svelte",
     "img",
     "src",
@@ -32,7 +42,13 @@
   "files": [
     "dist"
   ],
+  "peerDependencies": {
+    "vite": ">=5.0.0"
+  },
   "devDependencies": {
+    "@babel/core": "^7.26.9",
+    "@babel/preset-env": "^7.26.9",
+    "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-terser": "^0.4.4",
