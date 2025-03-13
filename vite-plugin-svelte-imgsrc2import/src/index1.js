@@ -3,6 +3,7 @@ import { parse } from 'svelte/compiler';
 // import { walk } from 'estree-walker'
 import fs from 'fs'
 
+// parse 不使用transform的code，使用fs获取原始代码进行parse
 export default function imgSrcToImport(options) {
   // 默认配置
   const defaultOptions = {
@@ -19,7 +20,7 @@ export default function imgSrcToImport(options) {
   const filter = createFilter(finalOptions.include, finalOptions.exclude);
 
   return {
-    name: 'vite-plugin-img-src-to-import', // 插件名称
+    name: 'vite-plugin-svelte-imgsrc2import', // 插件名称
     // enforce: 'pre', // 确保插件在解析 Svelte 文件之前运行
     // apply: 'build', // 插件在开发（serve）和构建（build）模式中调用
     load(id) {
@@ -142,3 +143,8 @@ export default function imgSrcToImport(options) {
     // }
   };
 }
+
+;(async() => {
+  await new Promise(r => setTimeout(r, 1000))
+  console.log('test')
+})()

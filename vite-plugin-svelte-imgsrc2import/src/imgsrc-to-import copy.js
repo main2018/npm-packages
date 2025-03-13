@@ -1,5 +1,6 @@
 import { createFilter } from '@rollup/pluginutils';
 
+// 不使用parse版
 export default function imgSrcToImport() {
   const filter = createFilter('**/*.svelte'); // 只处理 .svelte 文件
 

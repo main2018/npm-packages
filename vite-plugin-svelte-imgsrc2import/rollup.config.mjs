@@ -26,7 +26,7 @@ export default {
     commonjs(), // 将 CommonJS 模块转换为 ES 模块
     // typescript(), // 支持 TypeScript
     babel({
-      babelHelpers: "bundled",
+      babelHelpers: "runtime",
       exclude: "node_modules/**",
     }),
     terser({

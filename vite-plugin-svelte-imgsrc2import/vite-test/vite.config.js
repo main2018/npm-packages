@@ -4,8 +4,9 @@ import { resolve } from 'path';
 import legacy from "@vitejs/plugin-legacy";
 import babel from 'vite-plugin-babel';
 
-// import imgSrcToImport from '../src/index'; // dev
-import imgSrcToImport from '../dist/index'; // prod
+import imgSrcToImport from '../src/index'; // dev
+// import imgSrcToImport from '../src/index1';
+// import imgSrcToImport from '../dist/index'; // prod
 
 export default defineConfig({
   server: {

@@ -1,0 +1,26 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false, // 不转换 ES6 模块语法, 有助于 tree-shaking
+        "useBuiltIns": "usage",
+        "corejs": 3,
+        // "targets": "> 0.25%, not dead" // 根据目标环境自动转换语法
+        "targets": {
+          // "browsers": ["> 1%", "last 2 versions", "not ie <= 8"],
+          "node": "10" // "current" 针对当前 Node.js 版本
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "corejs": 3,
+        "regenerator": true // 是否启用 regenerator runtime, 自动引入 regenerator-runtime处理 async/await
+      }
+    ]
+  ]
+}

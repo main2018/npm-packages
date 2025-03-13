@@ -38,15 +38,14 @@ npm install vite-plugin-svelte-imgsrc2import --save-dev
 Create a `rollup.config.js` [configuration file](https://www.rollupjs.org/guide/en/#configuration-files) and import the plugin:
 
 ```typescript
-import imgSrcToImport from 'vite-plugin-svelte-imgsrc2import';
+import svelteImgSrcToImport from 'vite-plugin-svelte-imgsrc2import';
 
 export default {
-  input: 'src/index.js',
-  output: {
-    dir: 'output',
-    format: 'cjs'
-  },
-  plugins: [imgSrcToImport()]
+  ...
+  plugins: [
+    svelteImgSrcToImport(),
+    svelte(),
+  ]
 };
 ```
 
@@ -55,16 +54,17 @@ Then call `rollup` either via the [CLI](https://www.rollupjs.org/guide/en/#comma
 ## Options
 
 ```typescript
-import imgSrcToImport from 'vite-plugin-svelte-imgsrc2import';
+import svelteImgSrcToImport from 'vite-plugin-svelte-imgsrc2import';
 
 export default {
   ...
   plugins: [
-    imgSrcToImport({
-      include: '**/*.svelte', // 处理所有 .svelte 文件
-      exclude: '**/ignore/*.svelte', // 排除 ignore 目录下的 .svelte 文件
-      prefix: 'customPrefix_', // 自定义变量名前缀
+    svelteImgSrcToImport({
+      include: '**/*.svelte', // Process all .svelte files
+      exclude: '**/ignore/*.svelte', // Exclude .svelte files in the ignore directory
+      prefix: 'customPrefix_', // Custom variable name prefix
     }),
+    svelte(),
   ]
 };
 ```
