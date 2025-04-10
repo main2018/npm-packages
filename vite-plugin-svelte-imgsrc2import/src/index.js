@@ -1,9 +1,13 @@
 import { createFilter } from '@rollup/pluginutils';
 import { parse } from 'svelte/compiler';
 import walk from './walk';
+import path from 'path';
+import fs from 'fs';
 // import { walk } from 'estree-walker'
 // import fs from 'fs'
 const MyPluginName = 'vite-plugin-svelte-imgsrc2import'
+
+const resolveSrcPath = (base, relativePath) => path.resolve(path.dirname(base), relativePath);
 
 export default function imgSrcToImport(options) {
   // 默认配置
@@ -86,6 +90,13 @@ export default function imgSrcToImport(options) {
                 if (srcValue.type === 'Text') { // 处理普通字符串 src="../assets/top.png"
                   if (!srcValue.data.startsWith('.')) return // 只处理相对路径的 src
                   if (!importedSrcMap.has(srcValue.data)) {
+                    const absPath = resolveSrcPath(id, srcValue.data);
+                    // console.log(absPath, 111111);
+                    if (!fs.existsSync(absPath)) {
+                      console.error(`[vite-plugin-svelte-imgsrc2import] 文件不存在: ${absPath}`);
+                      // throw new Error(`[vite-plugin-svelte-imgsrc2import] 文件不存在: ${absPath}`);
+                      return; // 不处理这个 src
+                    }
                     // 生成唯一的变量名
                     // const importName = `img_${srcValue.data.replace(/[^a-zA-Z0-9]/g, '_')}`;
                     const importName = `${finalOptions.prefix}${srcValue.data.replace(
@@ -103,7 +114,33 @@ export default function imgSrcToImport(options) {
                   if (srcValue.expression?.type != 'Identifier') {
                     // const srcStr = transformedCode.slice(srcValue.start + offset, srcValue.end + offset)
                     const srcStr = transformedCode.slice(srcValue.expression.start + offset, srcValue.expression.end + offset)
+                    console.log('MustacheTag', srcStr);
+                    
                     if (!importedSrcMap.has(srcStr)) {
+                      const regRex = /["'`]?(.*?)[/\\][^/\\]+["'`]?$/
+                      if (srcValue.expression?.type == 'TemplateLiteral') {
+                        const dirPath = srcValue.expression?.quasis?.[0]?.value?.raw
+                        
+                        const absPath = resolveSrcPath(id, dirPath.match(regRex)?.[1] || srcStr);
+                        if (srcValue.expression?.type == 'ConditionalExpression') {
+                          console.log('ConditionalExpression', srcStr,  srcValue.expression);
+                        }
+                        console.log('dirPath', absPath);
+                        if (!fs.existsSync(absPath)) {
+                          console.error(`[vite-plugin-svelte-imgsrc2import] 目录不存在: ${absPath}`);
+                          return
+                        }
+                      } else if (srcValue.expression?.type == 'ConditionalExpression') {
+                        const dirPaths = [srcValue.expression.consequent, srcValue.expression.alternate].filter((item) => item.type == 'TemplateLiteral').map((item) => item?.quasis?.[0]?.value?.raw)
+                        for (const dirPath of dirPaths) {
+                          const absPath = resolveSrcPath(id, dirPath.match(regRex)?.[1] || srcStr);
+                          if (!fs.existsSync(absPath)) {
+                            console.error(`[vite-plugin-svelte-imgsrc2import] 目录不存在: ${absPath}`);
+                            return
+                            // break
+                          }
+                        }
+                      }
                       // console.log(srcStr, srcValue.expression?.type, 111111);
                       // TemplateLiteral/ConditionalExpression
                       
@@ -112,9 +149,12 @@ export default function imgSrcToImport(options) {
                         '_'
                       )}`;
                       importAsyncStatements += `  const ${importName} = new URL(${srcStr}, import.meta.url).href\n`;
-                      console.log(importName, importAsyncStatements, 888888);
+                      // console.log(srcStr, importName, importAsyncStatements, 888888);
                       importedSrcMap.set(srcStr, importName);
                     }
+                  } else {
+                    // console.log('srcValue', srcValue);
+                    // TODO: // 处理处理表达式的路径检查
                   }
                   // if (srcValue.expression?.type == 'TemplateLiteral') { // 处理模板字符串 src={`../assets/top${rank}.png`}
                   // }
@@ -203,5 +243,8 @@ export default function imgSrcToImport(options) {
     //   console.log(parse(code, 111111));
     //   return null
     // }
+    handleHotUpdate({ file, server, modules, timestamp }) {
+      // console.log('handleHotUpdate', file, server, modules, timestamp);
+    }
   };
 }
