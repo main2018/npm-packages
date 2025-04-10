@@ -6,7 +6,7 @@ import terser from '@rollup/plugin-terser';
 import clear from 'rollup-plugin-clear';
 
 export default {
-  mode: 'production',
+  // mode: 'production',
   input: 'src/index.js', // 入口文件
   output: [
     {
@@ -20,6 +20,7 @@ export default {
       sourcemap: false, // 生成 sourcemap
     },
   ],
+  external: ['svelte/compiler'],
   plugins: [
     clear({ targets: ['dist'] }),
     resolve(), // 解析第三方模块
