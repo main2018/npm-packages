@@ -61,6 +61,7 @@ export default function imgSrcToImport(options) {
         // let transformedCode = codeRaw;
         let transformedCode = code;
         let importStatements = '';
+        let importAsyncStatements = '';
 
         // 用于存储已处理的 src 路径，避免重复导入
         const importedSrcMap = new Map();
@@ -78,31 +79,62 @@ export default function imgSrcToImport(options) {
               // 找到 src 属性
               const srcAttr = node.attributes.find((attr) => attr.name === 'src');
               if (srcAttr && srcAttr.value.length > 0) {
-                const srcValue = srcAttr.value[0].data; // 获取 src 的值
+                const srcValue = srcAttr.value[0]; // 获取 src 的值
                 // const srcValue = transformedCode.substring(srcAttr.value[0].start + offset, srcAttr.value[0].end + offset); // 获取 src 的值
                 // console.log(transformedCode.substring(srcAttr.value[0].start + offset, srcAttr.value[0].end + offset), srcAttr.value[0].data, 999999);
-                if (!srcValue) return
-                if (srcValue.startsWith('.') && !importedSrcMap.has(srcValue)) {
-                  // 生成唯一的变量名
-                  // const importName = `img_${srcValue.replace(/[^a-zA-Z0-9]/g, '_')}`;
-                  const importName = `${finalOptions.prefix}${srcValue.replace(
-                    /[^a-zA-Z0-9]/g,
-                    '_'
-                  )}`;
-  
-                  // 添加 import 语句
-                  importStatements += `  import ${importName} from '${srcValue}';\n`;
-  
-                  // 记录已处理的 src 路径
-                  importedSrcMap.set(srcValue, importName);
+                // if (!srcValue.data) return
+                if (srcValue.type === 'Text') { // 处理普通字符串 src="../assets/top.png"
+                  if (!srcValue.data.startsWith('.')) return // 只处理相对路径的 src
+                  if (!importedSrcMap.has(srcValue.data)) {
+                    // 生成唯一的变量名
+                    // const importName = `img_${srcValue.data.replace(/[^a-zA-Z0-9]/g, '_')}`;
+                    const importName = `${finalOptions.prefix}${srcValue.data.replace(
+                      /[^a-zA-Z0-9]/g,
+                      '_'
+                    )}`;
+    
+                    // 添加 import 语句
+                    importStatements += `  import ${importName} from '${srcValue.data}';\n`;
+    
+                    // 记录已处理的 src 路径
+                    importedSrcMap.set(srcValue.data, importName);
+                  }
+                } else if (srcValue.type === 'MustacheTag') { // 处理动态 src
+                  if (srcValue.expression?.type != 'Identifier') {
+                    // const srcStr = transformedCode.slice(srcValue.start + offset, srcValue.end + offset)
+                    const srcStr = transformedCode.slice(srcValue.expression.start + offset, srcValue.expression.end + offset)
+                    if (!importedSrcMap.has(srcStr)) {
+                      // console.log(srcStr, srcValue.expression?.type, 111111);
+                      // TemplateLiteral/ConditionalExpression
+                      
+                      const importName = `${finalOptions.prefix}${srcStr.replace(
+                        /[^a-zA-Z0-9]/g,
+                        '_'
+                      )}`;
+                      importAsyncStatements += `  const ${importName} = new URL(${srcStr}, import.meta.url).href\n`;
+                      console.log(importName, importAsyncStatements, 888888);
+                      importedSrcMap.set(srcStr, importName);
+                    }
+                  }
+                  // if (srcValue.expression?.type == 'TemplateLiteral') { // 处理模板字符串 src={`../assets/top${rank}.png`}
+                  // }
+                  // else if (srcValue.expression?.type == 'ConditionalExpression') { // 处理三元表达式 src={rank1 <= 3 ? `../assets/top${rank1}.png` : `../assets/bg_light.png`}
+                  // }
+
+                  // return
+                } else {
+                  return
                 }
   
                 // 替换 src 属性
-                if (importedSrcMap.has(srcValue)) {
-                  const importName = importedSrcMap.get(srcValue);
-                  const { start, end } = srcAttr.value[0]; // 获取 src 值的起始和结束位置
+                const srcValueData = srcValue.type === 'Text'
+                  ? srcValue.data
+                  : transformedCode.slice(srcValue.expression.start + offset, srcValue.expression.end + offset);
+                if (importedSrcMap.has(srcValueData)) {
+                  const importName = importedSrcMap.get(srcValueData);
+                  const { start, end } = srcValue; // 获取 src 值的起始和结束位置
                   // transformedCode = transformedCode.replace(
-                  //   `src="${srcValue}"`,
+                  //   `src="${srcValue.data}"`,
                   //   `src={${importName}}`
                   // );
                   // 改进成用start end
@@ -136,12 +168,23 @@ export default function imgSrcToImport(options) {
         const scriptTag = ast.instance?.content;
         // console.log(transformedCode.substring(ast.instance?.content.start + offsetScript, ast.instance?.content.end + offsetScript), 7777777);
         // console.log(ast.instance, transformedCode.substring(start, end), 7777777);
+
+
         if (scriptTag && importStatements) {
           // 在 <script> 标签内容开头插入 import 语句
           transformedCode =
             transformedCode.slice(0, scriptTag.start + offsetScript) + // 保留 <script> 标签之前的部分
             `\n${importStatements}\n` + // 插入 import 语句
             transformedCode.slice(scriptTag.start + offsetScript); // 保留 <script> 标签及其之后的部分
+          offsetScript += `\n${importStatements}\n`.length
+        }
+        if (scriptTag && importAsyncStatements) {
+          // 在 <script> 标签内容开头插入 import 语句
+          transformedCode =
+            transformedCode.slice(0, scriptTag.end + offsetScript) + // 保留 <script> 标签之前的部分
+            `\n${importAsyncStatements}\n` + // 插入 import 语句
+            transformedCode.slice(scriptTag.end + offsetScript); // 保留 <script> 标签及其之后的部分
+          offsetScript += `\n${importAsyncStatements}\n`.length
         }
         // console.log(transformedCode, 666666);
 

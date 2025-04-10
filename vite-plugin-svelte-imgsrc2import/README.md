@@ -16,13 +16,20 @@
 before convert:
 ```svelte
 <img src="./assets/logo.png" alt="logo">
+<img src={`./assets/logo${i}.png`} alt="logo">
+<img src={i <= 3 ? `./assets/logo${i}.png` : './assets/logo6.png'} alt="logo">
 ```
 after convert:
 ```svelte
 <script>
   import img___assets_logo_png from './assets/img/a.png';
+
+  const img___assets_logo__i__png = new URL(`./assets/logo${i}.png`, import.meta.url).href
+  const img_i____3______assets_logo__i__png_______assets_logo6_png = new URL(i <= 3 ? `./assets/logo${i}.png` : './assets/logo6.png', import.meta.url).href
 </script>
 <img src={img___assets_logo_png} alt="logo">
+<img src={img___assets_logo__i__png} alt="logo">
+<img src={img_i____3______assets_logo__i__png_______assets_logo6_png} alt="logo">
 ```
 
 ## Install
