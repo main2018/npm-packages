@@ -1,6 +1,10 @@
 <img id="img1" src={`./assets/top${rank}.png`} alt="">
 <img id="img3" src={`./assets/top${rank}.png`} alt="">
 <img id="img4" src={imgUrl1} alt="">
+<img id="img5" src={"./assets/num-font.png"} alt="">
+<img id="img6" src={rank1 <= 3 ? "./assets/num-font.png" : `./assets/top${rank1}.png`} alt="">
+<img id="img7" src={"https://improxy.starmakerstudios.com/tools/im/800x/test/promotion/cover/c50b03067d888840d2d27b7d55af16cc.png?support=webp"} alt="">
+<img id="img8" src="https://improxy.starmakerstudios.com/tools/im/800x/test/promotion/cover/c50b03067d888840d2d27b7d55af16cc.png?support=webp" alt="">
 <img src={rank1 <= 3 ? `./assets/top${rank1}.png` : `./assets/bg_light.png`} alt="">
 <img class="imgConditionalExpression" src={rank1 > 3 ? `./assets/top${rank1}.png` : imgUrl2} alt="">
 <img src={imgUrl} alt="">

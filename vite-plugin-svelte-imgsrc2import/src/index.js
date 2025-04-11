@@ -114,7 +114,7 @@ export default function imgSrcToImport(options) {
                   if (srcValue.expression?.type != 'Identifier') {
                     // const srcStr = transformedCode.slice(srcValue.start + offset, srcValue.end + offset)
                     const srcStr = transformedCode.slice(srcValue.expression.start + offset, srcValue.expression.end + offset)
-                    console.log('MustacheTag', srcStr);
+                    console.log('MustacheTag', srcStr, srcValue.expression?.type);
                     
                     if (!importedSrcMap.has(srcStr)) {
                       const regRex = /["'`]?(.*?)[/\\][^/\\]+["'`]?$/
@@ -131,14 +131,28 @@ export default function imgSrcToImport(options) {
                           return
                         }
                       } else if (srcValue.expression?.type == 'ConditionalExpression') {
-                        const dirPaths = [srcValue.expression.consequent, srcValue.expression.alternate].filter((item) => item.type == 'TemplateLiteral').map((item) => item?.quasis?.[0]?.value?.raw)
-                        for (const dirPath of dirPaths) {
-                          const absPath = resolveSrcPath(id, dirPath.match(regRex)?.[1] || srcStr);
+                        // console.log([srcValue.expression.consequent, srcValue.expression.alternate], 444444);
+                        const dirPaths = [srcValue.expression.consequent, srcValue.expression.alternate].filter((item) => ['Literal', 'TemplateLiteral'].includes(item?.type))
+                        for (const dirPathObj of dirPaths) {
+                          const dirPath = dirPathObj.type == 'TemplateLiteral' ? dirPathObj.quasis[0].value.raw : dirPathObj.value
+                          let absPath = dirPathObj.type == 'TemplateLiteral'
+                          ? resolveSrcPath(id, dirPath.match(regRex)?.[1] || srcStr)
+                          : resolveSrcPath(id, dirPath)
+                          
                           if (!fs.existsSync(absPath)) {
-                            console.error(`[vite-plugin-svelte-imgsrc2import] 目录不存在: ${absPath}`);
+                            console.error(`[vite-plugin-svelte-imgsrc2import] ${dirPathObj.type == 'TemplateLiteral' ? '目录' : '文件'}不存在: ${absPath}`);
                             return
                             // break
                           }
+                        }
+                      } else if (srcValue.expression?.type == 'Literal') { // src={"./assets/num-font.png"}
+                        // TODO: src={"./assets/num-font.png"} 方式的MustacheTag看是否需要转成跟srcValue.type === 'Text' 类似的处理
+                        // console.log(srcStr, srcValue.expression.value, srcValue.expression.value.startsWith('.'), 777777);
+                        if (!srcValue.expression.value.startsWith('.')) return // 只处理相对路径的 src
+                        const absPath = resolveSrcPath(id, srcValue.expression.value);
+                        if (!fs.existsSync(absPath)) {
+                          console.error(`[vite-plugin-svelte-imgsrc2import] 文件不存在: ${absPath}`);
+                          return; // 不处理这个 src
                         }
                       }
                       // console.log(srcStr, srcValue.expression?.type, 111111);
