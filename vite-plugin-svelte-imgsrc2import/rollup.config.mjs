@@ -35,8 +35,13 @@ export default {
         comments: false, // 移除注释
       },
       compress: {
-        drop_console: true, // 移除 console
+        // drop_console: true, // 移除 console
         drop_debugger: true, // 移除 debugger
+        pure_funcs: [ // 移除指定函数
+          'console.log',
+          'console.debug',
+          'console.info'
+        ]
       },
     }), // 压缩代码
   ],
