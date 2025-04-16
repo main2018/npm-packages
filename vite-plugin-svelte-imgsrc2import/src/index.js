@@ -154,6 +154,8 @@ export default function imgSrcToImport(options) {
                           console.error(`[vite-plugin-svelte-imgsrc2import] 文件不存在: ${absPath}`);
                           return; // 不处理这个 src
                         }
+                      } else {
+                        return
                       }
                       // console.log(srcStr, srcValue.expression?.type, 111111);
                       // TemplateLiteral/ConditionalExpression
@@ -169,6 +171,7 @@ export default function imgSrcToImport(options) {
                   } else {
                     // console.log('srcValue', srcValue);
                     // TODO: // 处理处理表达式的路径检查
+                    return
                   }
                   // if (srcValue.expression?.type == 'TemplateLiteral') { // 处理模板字符串 src={`../assets/top${rank}.png`}
                   // }
