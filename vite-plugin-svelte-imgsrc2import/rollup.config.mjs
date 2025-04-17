@@ -20,7 +20,7 @@ export default {
       sourcemap: false, // 生成 sourcemap
     },
   ],
-  external: ['svelte', 'svelte/compiler'],
+  external: ['svelte', 'svelte/compiler', '@sveltejs/vite-plugin-svelte'],
   plugins: [
     clear({ targets: ['dist'] }),
     resolve(), // 解析第三方模块

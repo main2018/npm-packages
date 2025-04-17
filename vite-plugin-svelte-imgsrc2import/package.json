@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-svelte-imgsrc2import",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": false,
   "license": "MIT",
   "description": "vite plugin to convert svelte img src to import",
@@ -45,7 +45,8 @@
   ],
   "peerDependencies": {
     "vite": ">=6.0.0",
-    "svelte": ">=3.0.0"
+    "svelte": ">=3.0.0",
+    "@sveltejs/vite-plugin-svelte": ">=3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.9",

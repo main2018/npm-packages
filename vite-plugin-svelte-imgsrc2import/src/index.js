@@ -1,5 +1,8 @@
 import { createFilter } from '@rollup/pluginutils';
-import { parse } from 'svelte/compiler';
+import { parse, preprocess } from 'svelte/compiler';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+// svelte在线编译地址：https://svelte.dev/repl 或者 https://svelte.dev/playground/hello-world?version=5.27.0
+
 // import { compileStringAsync } from 'sass-embedded';
 import walk from './walk';
 import path from 'path';
@@ -73,11 +76,18 @@ export default function imgSrcToImport(options) {
         // );
         // // 处理sass结束
 
-        // code先去除css部分，再解析(不然解析sass的for会报错), 先把style提取出来包含style标签，后面再补上, style有可能是多个
-        const styleMatch = code.match(/<style[^>]*>([\s\S]*?)<\/style>/g);
-        // const codeRaw = code.replace(/<style[^>]*>[\s\S]*?<\/style>/, '');
-        console.log(styleMatch, 111111);
-        code = code.replace(/<style[^>]*>[\s\S]*?<\/style>/g, '');
+        const preprocessed = await preprocess(code, vitePreprocess(), { filename: id });
+        console.log(preprocessed, 'preprocessed');
+        code = preprocessed.code
+        
+        // // 去除style
+        // // code先去除css部分，再解析(不然解析sass的for会报错), 先把style提取出来包含style标签，后面再补上, style有可能是多个
+        // const styleMatch = code.match(/<style[^>]*>([\s\S]*?)<\/style>/g);
+        // // const codeRaw = code.replace(/<style[^>]*>[\s\S]*?<\/style>/, '');
+        // console.log(styleMatch, 111111);
+        // code = code.replace(/<style[^>]*>[\s\S]*?<\/style>/g, '');
+        // // 去除style结束
+
         const ast = parse(code, { filename: id });
         // console.log(codeRaw.substring(ast.instance?.content.start, ast.instance?.content.end), 222222222);
         console.log('解析成功了');
@@ -264,13 +274,13 @@ export default function imgSrcToImport(options) {
         }
         // console.log(transformedCode, 666666);
 
-        transformedCode += styleMatch?.join('') || ''
+        // transformedCode += styleMatch?.join('') || ''
         return {
           code: transformedCode,
           map: null, // 不生成 sourcemap
         }
       } catch (error) {
-        console.error('Error transforming Svelte file:', error);
+        console.error('[vite-plugin-svelte-imgsrc2import] Error transforming Svelte file:', error);
         return null;
       }
     },
