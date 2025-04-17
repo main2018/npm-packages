@@ -27,6 +27,12 @@ export default {
     commonjs(), // 将 CommonJS 模块转换为 ES 模块
     // typescript(), // 支持 TypeScript
     babel({
+      // 注意runtime模式如果未安装core-js，rollup会警告：且打包产物里会不包含polyfill代码，需要用户自己引入
+      // (!) Unresolved dependencies
+      // https://rollupjs.org/troubleshooting/#warning-treating-module-as-external-dependency
+      // core-js/modules/es.promise.js (imported by "src/index.js")
+      // 
+      // 如果安装了core-js，打包产物里会包含polyfill代码，无需用户引入
       babelHelpers: "runtime",
       exclude: "node_modules/**",
     }),

@@ -24,6 +24,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@mateothegreat/svelte5-router": "^2.14.1"
+    "@mateothegreat/svelte5-router": "^2.14.1",
+    "core-js": "^3.41.0"
   }
 }

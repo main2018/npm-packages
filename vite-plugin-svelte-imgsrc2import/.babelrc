@@ -19,6 +19,7 @@
       "@babel/plugin-transform-runtime",
       {
         "corejs": 3,
+        "helpers": true, // 用来自动引入 polyfill，默认是true
         "regenerator": true // 是否启用 regenerator runtime, 自动引入 regenerator-runtime处理 async/await
       }
     ]
