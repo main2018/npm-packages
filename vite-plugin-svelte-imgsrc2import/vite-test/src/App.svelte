@@ -1,41 +1,63 @@
-<img id="img1" src={`./assets/top${rank}.png`} alt="">
-<img id="img3" src={`./assets/top${rank}.png`} alt="">
-<img id="img4" src={imgUrl1} alt="">
-<img id="img5" src={"./assets/num-font.png"} alt="">
-<img id="img6" src={rank1 <= 3 ? "./assets/num-font.png" : `./assets/top${rank1}.png`} alt="">
-<img id="img7" src={"https://improxy.starmakerstudios.com/tools/im/800x/test/promotion/cover/c50b03067d888840d2d27b7d55af16cc.png?support=webp"} alt="">
-<img id="img8" src="https://improxy.starmakerstudios.com/tools/im/800x/test/promotion/cover/c50b03067d888840d2d27b7d55af16cc.png?support=webp" alt="">
-<img src={rank1 <= 3 ? `./assets/top${rank1}.png` : `./assets/bg_light.png`} alt="">
-<img class="imgConditionalExpression" src={rank1 > 3 ? `./assets/top${rank1}.png` : imgUrl2} alt="">
-<img src={imgUrl} alt="">
+<!-- <Router basePath="/sv/happy-day" {routes} hooks={hooks}/> -->
+{#if Component}
+ <svelte:component this={Component} />
+{/if}
+ <Index/>
 
-<!-- <img src="./assets/bg_pk_unknow.png"/> -->
-<img src="./assets/bg_pk.png"/>
-<img src="./assets/bg_pk.png"/>
-<img src="./assets/logo1.png"/>
-<img src="./assets/bg-pop1.png"/>
+<script lang="ts">
+    import { onMount } from 'svelte';
+  // import { Router, goto } from "@mateothegreat/svelte5-router";
+  import Index from './pages/index.svelte';
+  const Rank = async() => import('./pages/rank.svelte');
+  const Detail = async() => import('./pages/detail.svelte');
 
-<script>
-  import logo from './assets/logo.png';
+  let Component
+  onMount(async() => {
+    const module = await import('./pages/rank.svelte');
+    Component = module.default;
+  })
+  // const routes = [
+  //   {
+  //     // path: "/",
+  //     path: "index",
+  //     name: "index",
+  //     component: Index
+  //   },
+  //   {
+  //     path: "rank",
+  //     name: "rank",
+  //     component: Rank
+  //   },
+  //   {
+  //     path: "detail",
+  //     name: "detail",
+  //     component: Detail
+  //   },
+  // ];
+  // const hooks = {
+  //   pre: (route) => {
+  //     // const pageName = route.route?.name ?? 'home'
+  //     // console.log('pre', route, pageName);
+  //     // console.log('是否通过路由验证：', !routes.some(r => r.name == pageName));
+      
+  //     // if (!routes.some(r => r.name == pageName)) {
+  //     //   toPath('')
+  //     //   return false
+  //     // }
+  //     // if (!login) {
+  //     //   console.log('未登录');
+  //     //   return false;
+  //     // }
+  //     return true
+  //   },
+  //   post: (route) => {
+  //     // pageName = route.route?.name ?? 'home'
+  //     // console.log('post', route, pageName);
+  //   }
+  // }
 
-  let message = 'Hello, Svelte with Vite!';
-  let rank = 1;
-  let rank1 = $state(3)
-  const imgUrl = new URL(`./assets/top${rank}.png`, import.meta.url).href
-  const imgUrl2 = new URL(`./assets/num-font.png`, import.meta.url).href
-  const imgUrl1 = new URL(`../assets/top${rank}.png`, import.meta.url).href
+  
 </script>
-<img id="img2" src={`./assets/top${rank}.png`} alt="">
-
-<main>
-  <img src="./assets/bg-pop.png"/>
-  <img src="./assets/bg_light.png"/>
-  <img src={logo} alt="Logo" />
-  <h1>{message}</h1>
-  <p>Welcome to your new Svelte project.</p>
-</main>
-<img id="img2" src={`./assets/top${rank}.png`} alt="">
-
 
 <style lang="scss">
   :global(body) {
@@ -52,16 +74,5 @@
   }
   img{
     width: 100%;
-  }
-
-  h1 {
-    color: #ff3e00;
-    font-size: 2.5em;
-    margin-bottom: 0.5em;
-  }
-
-  p {
-    color: #333;
-    font-size: 1.2em;
   }
 </style>

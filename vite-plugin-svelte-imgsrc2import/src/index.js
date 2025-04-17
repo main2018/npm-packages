@@ -1,5 +1,6 @@
 import { createFilter } from '@rollup/pluginutils';
 import { parse } from 'svelte/compiler';
+// import { compileStringAsync } from 'sass-embedded';
 import walk from './walk';
 import path from 'path';
 import fs from 'fs';
@@ -47,7 +48,7 @@ export default function imgSrcToImport(options) {
         }
       }
     },
-    transform(code, id) {
+    async transform(code, id) {
       // if (!id.includes('submissionRecord')) return
       if (!filter(id)) return; // 如果不是 .svelte 文件，直接返回
       try {
@@ -59,6 +60,24 @@ export default function imgSrcToImport(options) {
         // ⚠️ transform函数的code参数是处理后的代码，而不是原始代码
         // -- 要使用transform的code，插件必须在svelte插件之前，否则解析会报错, configResolved就是为了调整插件顺序保证transform的code是svelte插件处理前的代码
         // -- 或者使用load函数处理，使用fs读取原始代码，然后parse
+
+        // // 处理sass
+        // const styleMatch = code.match(/<style[^>]*lang=["']scss["'][^>]*>([\s\S]*?)<\/style>/);
+        // const scssContent = styleMatch?.[1] || '';
+        // // 2. 编译 SCSS -> CSS
+        // const result = await compileStringAsync(scssContent);
+        // const css = result.css;
+        // code = code.replace(
+        //   /<style[^>]*lang=["']scss["'][^>]*>[\s\S]*?<\/style>/,
+        //   `<style>${css}</style>`
+        // );
+        // // 处理sass结束
+
+        // code先去除css部分，再解析(不然解析sass的for会报错), 先把style提取出来包含style标签，后面再补上, style有可能是多个
+        const styleMatch = code.match(/<style[^>]*>([\s\S]*?)<\/style>/g);
+        // const codeRaw = code.replace(/<style[^>]*>[\s\S]*?<\/style>/, '');
+        console.log(styleMatch, 111111);
+        code = code.replace(/<style[^>]*>[\s\S]*?<\/style>/g, '');
         const ast = parse(code, { filename: id });
         // console.log(codeRaw.substring(ast.instance?.content.start, ast.instance?.content.end), 222222222);
         console.log('解析成功了');
@@ -245,6 +264,7 @@ export default function imgSrcToImport(options) {
         }
         // console.log(transformedCode, 666666);
 
+        transformedCode += styleMatch?.join('') || ''
         return {
           code: transformedCode,
           map: null, // 不生成 sourcemap

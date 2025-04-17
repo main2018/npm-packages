@@ -40,6 +40,24 @@ export default defineConfig({
   ],
   build: {
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/svelte')) {
+            return 'svelte-bundle'
+          }
+          if (id.includes('node_modules/swiper')) {
+            return 'swiper-bundle'
+          }
+          if (id.includes('node_modules/@mateothegreat/svelte5-router')) {
+            return 'svelte5-router-bundle'
+          }
+          if (id.includes('node_modules') && !id.includes('firebase')) {
+            return 'vendor'
+          }
+        },
+      },
+    },
   },
   css: {
     postcss: resolve(__dirname, "../viteConfig/postcss.config.cjs"),

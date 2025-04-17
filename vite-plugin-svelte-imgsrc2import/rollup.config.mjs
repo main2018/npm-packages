@@ -20,7 +20,7 @@ export default {
       sourcemap: false, // 生成 sourcemap
     },
   ],
-  external: ['svelte/compiler'],
+  external: ['svelte', 'svelte/compiler'],
   plugins: [
     clear({ targets: ['dist'] }),
     resolve(), // 解析第三方模块
