@@ -1,11 +1,19 @@
 {
   "name": "vite-plugin-svelte-imgsrc2import",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": false,
   "license": "MIT",
   "description": "vite plugin to convert svelte img src to import",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/main2018/npm-packages.git"
+  },
+  "bugs": {
+    "url": "https://github.com/main2018/npm-packages/issues"
+  },
+  "homepage": "https://github.com/main2018/npm-packages/tree/main/vite-plugin-svelte-imgsrc2import",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
