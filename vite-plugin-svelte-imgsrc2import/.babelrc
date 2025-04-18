@@ -3,9 +3,9 @@
     [
       "@babel/preset-env",
       {
-        "modules": false, // 不转换 ES6 模块语法, 有助于 tree-shaking
-        "useBuiltIns": "usage",
-        "corejs": 3,
+        // "modules": false, // 不转换 ES6 模块语法, 有助于 tree-shaking
+        // "useBuiltIns": "usage",
+        // "corejs": 3,
         // "targets": "> 0.25%, not dead" // 根据目标环境自动转换语法
         "targets": {
           // "browsers": ["> 1%", "last 2 versions", "not ie <= 8"],
@@ -18,9 +18,9 @@
     [
       "@babel/plugin-transform-runtime",
       {
-        "corejs": 3,
-        "helpers": true, // 用来自动引入 polyfill，默认是true
-        "regenerator": true // 是否启用 regenerator runtime, 自动引入 regenerator-runtime处理 async/await
+        "helpers": true, // 复用辅助函数（如 _extends）以减少代码重复
+        "regenerator": true, // 是否启用 regenerator runtime, 自动引入 regenerator-runtime处理 async/await
+        "corejs": 3 // 使用@babel/runtime-corejs3，沙箱化的core-js，不会污染全局环境
       }
     ]
   ]
