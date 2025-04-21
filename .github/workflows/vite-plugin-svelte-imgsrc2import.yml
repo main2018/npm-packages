@@ -45,7 +45,7 @@ jobs:
         with:
           node-version: 18
           # cache: 'npm'
-          
+
       # 缓存 node_modules
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -64,3 +64,15 @@ jobs:
       - name: Build Package A
         working-directory: ${{ env.WORKDIR }}
         run: npm run build
+
+      # 发布
+      - name: Publish Package A
+        run: npm publish --registry=https://registry.npmjs.org/
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # 发布
+      # - name: Publish Package A
+      #   uses: JS-DevTools/npm-publish@v1
+      #   with:
+      #     token: ${{ secrets.NPM_TOKEN }}
+      #     package: ${{ env.WORKDIR }}
