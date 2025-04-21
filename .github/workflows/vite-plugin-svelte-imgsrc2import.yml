@@ -84,7 +84,7 @@ jobs:
           if [ -z "$NODE_AUTH_TOKEN" ]; then
             echo "❌ NODE_AUTH_TOKEN 不存在"
           else
-            echo "✅ NPM_TOKEN 存在 (值已隐藏)" 
+            echo "✅ NODE_AUTH_TOKEN 存在 (值已隐藏)" 
           fi
           npm whoami
           npm publish --registry=https://registry.npmjs.org/ --access=public

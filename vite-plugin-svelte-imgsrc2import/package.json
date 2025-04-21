@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-svelte-imgsrc2import",
-  "version": "0.1.27",
+  "version": "0.1.28",
   "private": false,
   "license": "MIT",
   "description": "vite plugin to convert svelte img src to import",
@@ -24,12 +24,12 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "rollup -c",
-    "prepublish": "npm version patch -m \"update: update version to %s\"",
-    "publish": "git add . && git commit -am 'update: update version'",
-    "postpublish": "git push && git push origin --tags",
-    "pub": "npm run build && npm version patch --no-git-tag-version && npm publish --registry=https://registry.npmjs.org/",
-    "postpub": "node ./postpub.js",
-    "postpub1": "git add . && git commit -am 'update' && git push"
+    "prepub": "npm version patch -m \"update: update version to %s\"",
+    "pub": "git add . && git commit -am 'update: update version'",
+    "postpub": "git push && git push origin --tags",
+    "pub1": "npm run build && npm version patch --no-git-tag-version && npm publish --registry=https://registry.npmjs.org/",
+    "postpub1": "node ./postpub.js",
+    "postpub2": "git add . && git commit -am 'update' && git push"
   },
   "keywords": [
     "vite",
