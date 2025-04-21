@@ -76,9 +76,12 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # 发布
+      # 发布 
       - name: Publish Package A
-        run: npm publish --registry=https://registry.npmjs.org/ --access=public
+        # run: npm publish --registry=https://registry.npmjs.org/ --access=public
+        run: |
+          npm whoami
+          npm publish --registry=https://registry.npmjs.org/ --access=public
         working-directory: ${{ env.WORKDIR }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
