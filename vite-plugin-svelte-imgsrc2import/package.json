@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-svelte-imgsrc2import",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "private": false,
   "license": "MIT",
   "description": "vite plugin to convert svelte img src to import",

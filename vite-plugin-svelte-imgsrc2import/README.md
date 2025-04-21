@@ -34,7 +34,7 @@ after convert:
 
 ## Install
 
-Using npm:
+Using npm: 
 
 ```console
 npm install vite-plugin-svelte-imgsrc2import --save-dev
