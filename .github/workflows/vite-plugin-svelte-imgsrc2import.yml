@@ -64,10 +64,21 @@ jobs:
       - name: Build Package A
         working-directory: ${{ env.WORKDIR }}
         run: npm run build
+      
+      - name: Check if NPM_TOKEN is set
+        run: |
+          if [ -z "$NPM_TOKEN" ]; then
+            echo "❌ NPM_TOKEN is not set"
+            exit 1
+          else
+            echo "✅ NPM_TOKEN is set (value hidden for security)"
+          fi
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # 发布
       - name: Publish Package A
-        run: npm publish --registry=https://registry.npmjs.org/
+        run: npm publish --registry=https://registry.npmjs.org/ --access=public
         working-directory: ${{ env.WORKDIR }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
