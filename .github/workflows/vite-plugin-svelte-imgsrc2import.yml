@@ -44,7 +44,16 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'npm'
+          # cache: 'npm'
+          
+      # 缓存 node_modules
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.WORKDIR }}/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('${{ env.WORKDIR }}/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       # 安装依赖
       - name: Install dependencies for Package A
