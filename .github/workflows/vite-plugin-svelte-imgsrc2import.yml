@@ -38,20 +38,20 @@ jobs:
     steps:
       # 拉取代码
       - name: Checkout repository
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
 
       - name: Use Node.js
-      - uses: actions/setup-node@v3
+        uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'npm'
 
       # 安装依赖
       - name: Install dependencies for Package A
-      - working-directory: ${{ env.WORKDIR }}
+        working-directory: ${{ env.WORKDIR }}
         run: npm ci
 
       # 打包
       - name: Build Package A
-      - working-directory: ${{ env.WORKDIR }}
+        working-directory: ${{ env.WORKDIR }}
         run: npm run build
