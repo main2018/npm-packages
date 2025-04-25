@@ -22,7 +22,7 @@ before convert:
 after convert:
 ```svelte
 <script>
-  import img___assets_logo_png from './assets/img/a.png';
+  import img___assets_logo_png from './assets/img/logo.png';
 
   const img___assets_logo__i__png = new URL(`./assets/logo${i}.png`, import.meta.url).href
   const img_i____3______assets_logo__i__png_______assets_logo6_png = new URL(i <= 3 ? `./assets/logo${i}.png` : './assets/logo6.png', import.meta.url).href
