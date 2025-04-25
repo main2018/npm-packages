@@ -13,6 +13,19 @@ const MyPluginName = 'vite-plugin-svelte-imgsrc2import'
 
 const resolveSrcPath = (base, relativePath) => path.resolve(path.dirname(base), relativePath);
 
+function getConditionalExpressionChildNodes(node) {
+  if (node.type !== 'ConditionalExpression') return [];
+  const childNodes = [];
+  [node.consequent, node.alternate].forEach(child => {
+    if (!child) return;
+    if (child.type === 'ConditionalExpression') {
+      childNodes.push(...getConditionalExpressionChildNodes(child));
+    } else {
+      childNodes.push(child);
+    }
+  })
+  return childNodes;
+}
 export default function imgSrcToImport(options) {
   // 默认配置
   const defaultOptions = {
@@ -77,7 +90,7 @@ export default function imgSrcToImport(options) {
         // // 处理sass结束
 
         const preprocessed = await preprocess(code, vitePreprocess(), { filename: id });
-        console.log(preprocessed, 'preprocessed');
+        // console.log(preprocessed, 'preprocessed');
         code = preprocessed.code
         
         // // 去除style
@@ -143,6 +156,8 @@ export default function imgSrcToImport(options) {
                   if (srcValue.expression?.type != 'Identifier') {
                     // const srcStr = transformedCode.slice(srcValue.start + offset, srcValue.end + offset)
                     const srcStr = transformedCode.slice(srcValue.expression.start + offset, srcValue.expression.end + offset)
+                    let srcStrCopy = srcStr
+                    
                     console.log('MustacheTag', srcStr, srcValue.expression?.type);
                     
                     if (!importedSrcMap.has(srcStr)) {
@@ -160,10 +175,36 @@ export default function imgSrcToImport(options) {
                           return
                         }
                       } else if (srcValue.expression?.type == 'ConditionalExpression') {
-                        // console.log([srcValue.expression.consequent, srcValue.expression.alternate], 444444);
-                        const dirPaths = [srcValue.expression.consequent, srcValue.expression.alternate].filter((item) => ['Literal', 'TemplateLiteral'].includes(item?.type))
+                        // if (srcStr.includes('gold_big')) {
+                        //   console.log([srcValue], 444444);
+                        // }
+                        // TODO: 待处理：深层嵌套的ConditionalExpression a ? b ? c : d
+                        const childNodes = getConditionalExpressionChildNodes(srcValue.expression);
+                        // console.log(childNodes, 111111);
+
+                        // const dirPaths = [srcValue.expression.consequent, srcValue.expression.alternate].filter((item) => ['Literal', 'TemplateLiteral'].includes(item?.type))
+                        const dirPaths = childNodes.filter((item) => ['Literal', 'TemplateLiteral'].includes(item?.type))
                         for (const dirPathObj of dirPaths) {
                           const dirPath = dirPathObj.type == 'TemplateLiteral' ? dirPathObj.quasis[0].value.raw : dirPathObj.value
+                          // 判断Literal/TemplateLiteral是否是静态字符串
+                          const srcValueStr = transformedCode.slice(dirPathObj.start + 1 + offset, dirPathObj.end - 1 + offset)
+                          if (srcValueStr === dirPath) {
+                            // import导入
+                            if (!srcValueStr.startsWith('.')) return // 只处理相对路径的 src
+                            const importName = `${finalOptions.prefix}${srcValueStr.replace(
+                              /[^a-zA-Z0-9]/g,
+                              '_'
+                            )}`;
+                            // 添加 import 语句
+                            if (!importedSrcMap.has(srcValueStr)) {
+                              importedSrcMap.set(srcValueStr, importName);
+                              importStatements += `  import ${importName} from '${srcValueStr}';\n`;
+                            }
+                            // importStatements += `  import ${importName} from '${srcValueStr}';\n`;
+                            srcStrCopy = srcStrCopy.replaceAll(transformedCode.slice(dirPathObj.start + offset, dirPathObj.end + offset), importName)
+                            console.log(importStatements, srcStrCopy, 333333);
+                          }
+
                           let absPath = dirPathObj.type == 'TemplateLiteral'
                           ? resolveSrcPath(id, dirPath.match(regRex)?.[1] || srcStr)
                           : resolveSrcPath(id, dirPath)
@@ -193,7 +234,8 @@ export default function imgSrcToImport(options) {
                         /[^a-zA-Z0-9]/g,
                         '_'
                       )}`;
-                      importAsyncStatements += `  const ${importName} = new URL(${srcStr}, import.meta.url).href\n`;
+                      // importAsyncStatements += `  const ${importName} = new URL(${srcStr}, import.meta.url).href\n`;
+                      importAsyncStatements += `  const ${importName} = new URL(${srcStrCopy}, import.meta.url).href\n`;
                       // console.log(srcStr, importName, importAsyncStatements, 888888);
                       importedSrcMap.set(srcStr, importName);
                     }
@@ -272,7 +314,7 @@ export default function imgSrcToImport(options) {
             transformedCode.slice(scriptTag.end + offsetScript); // 保留 <script> 标签及其之后的部分
           offsetScript += `\n${importAsyncStatements}\n`.length
         }
-        // console.log(transformedCode, 666666);
+        console.log(transformedCode, 666666);
 
         // transformedCode += styleMatch?.join('') || ''
         return {
