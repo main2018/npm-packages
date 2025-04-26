@@ -5,14 +5,7 @@
   -webkit-overflow-scrolling: touch;
   font-family: SF-Pro-Display-Regular;
 }
-@font-face {font-family: "iconfont";
-  src: url('/static/font/iconfont.eot?t=1579001227751'); /* IE9 */
-  src: url('/static/font/iconfont.eot?t=1579001227751#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAT0AAsAAAAACgQAAASnAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCCfgqHcIYLATYCJAMMCwgABCAFhG0HOhtNCBFVnP3JfhTGbU4gqZTd9nWa9HQ7jaqRy3089Xj43K/33CT7fj6hAyAPLIFai6pG0HiUokbxeDZih/KymWWFVSmkewKSAvbziMtNGS5GvVAsyXnwXZb5n4T1ZHSdr9NVqkK2wvWPe6f/N2gsoPmAEumyzNYctjHqAowmUKB76wAroAFssTaM3UQcxnECXSYogye2zt6gKsC4QLy8ef0iqDGLUkILVd/kLC0g3gOimkJw4wB4534//gPNYAGSVgZg6uULmyvg4BfuEI9H/6POUARI+3NBWkXGGqAQ97meS9nPrMHrMjzFXHllEfzK//9TTJLM9g+PkIgGAE0Pi1+KJX5h6a5JWYvEY/P7DbqICyDe9lBJUmfFMQpQcqAbv4bz8z6Li0y20EQ6MymMiiTEs7GBL1+QsCWzJDpMKihJuRWfX5iKpdHHltjzfjp7QgLFOz6U5pOYRGdfXPQJ9X6N0caURBu9UwWnlFTr7UsV+8QMi41LZfPEdIvVC2VzRdnSxfOlaxW1MyTy5TsV9TMsiuVHdZVLXJIZi9rCJQ7xKHVYXqSBmSIwLq/S5FSi0C1sUGZWIpMtrFOmVSCTI8KeJVUkV6OglylZpNShYJRpWaY0oqNW6pomtKAnVuqYdA0row4smCQkUyjxhbTKRd3ERHiha8kuqYQK0HhK/bxyfD6Nlph6ougmtZhWUhGVmpBCSUdFEpKR+GLa4KJpYhqdnlRArVjQSUgAzCW5lpaYC106P4+0z1vHl0KIJdGbltRaaZldxehZmKhxVQ2qIX4ePL4+knugdk/z3SB4dUKw5b/bx88idYfcU5fgzooLbW4Jw5neV1zhkwCNGD/LuPxTCblsSrQ/910xw1S41ktJtjXXrSqt/4Tqrvyv6lLfwEvuWsBwG+XhmvvwUtscvh2TC0HkhhiIbDf77q/o9in+iNPHS7tROco5UbtLx6cj8Fvt0b922btlEcaQHBIiN/bWAkq//DDHJd6av7QFvy08hX+K0KRHN4faL+PrzKU+03bV6HSofdFlf6nrux7qPz5usiu4n75q1Najzkli34z94aG+e13K/3KTPtspy4ZgI/1n+kbBDZb+jxT+PPmjYL/0cKr3iLz6TWViqAu8eg06QyFVuYiaa6GQM7drdCswo85VWmSvf80puKC/k/wtC4Kd9J+BA9Dey2t47k9vmE+BotvnuY2/Vva/seUn73gwzB3RflXkV6gPxxt8aNKadcWUA2suugRL7HyOlvooRaxI9msDgSG/9rrR2jRCNxpC0mEcsmoOLfg1aOm2B41qH7qsqld3G2bFonRixYuBMOANSZ/PkA34oAX/hZYxf2gMRAxd7mN4y24LocWxxc7jCP0T9MAbIbsXXvEB5XXpbFTuMi5onY5DnmTJfI0b2j5muJssvCcgyytUzGm4LAy75QkHnyjv9zJNKe9BycBrIByzUMdDI9B7AtqAbYg290Tq8wdIulp0bElNg/sCWY7uH+QSWQ201my1as6l0rmRCp5LEUBSIVuBinOhBWYY2PMHTdDAS6gWqV0p5RpRXU0yvm69vj3QBVTkSJGjOJ9gY5FQlVPxU5ZBAAA=') format('woff2'),
-  url('/static/font/iconfont.woff?t=1579001227751') format('woff'),
-  url('/static/font/iconfont.ttf?t=1579001227751') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
-  url('/static/font/iconfont.svg?t=1579001227751#iconfont') format('svg'); /* iOS 4.1- */
-}
+
 body,
 div,
 dl,

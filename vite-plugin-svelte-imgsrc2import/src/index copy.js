@@ -133,12 +133,6 @@ function getConditionalExpressionChildNodes(node) {
   })
   return childNodes;
 }
-
-const sveltePreprocess = vitePreprocess({
-  script: false,  // 不处理 <script>
-  markup: false,  // 不处理 HTML
-  style: true     // 只处理 <style>
-});
 export default function imgSrcToImport(options) {
   // 默认配置
   const defaultOptions = {
@@ -203,8 +197,7 @@ export default function imgSrcToImport(options) {
         // );
         // // 处理sass结束
 
-        // const preprocessed = await preprocess(code, vitePreprocess(), { filename: id });
-        const preprocessed = await preprocess(code, sveltePreprocess, { filename: id });
+        const preprocessed = await preprocess(code, vitePreprocess(), { filename: id });
         // console.log(preprocessed, 'preprocessed');
         code = preprocessed.code
         
@@ -464,6 +457,12 @@ export default function imgSrcToImport(options) {
         return null;
       }
     },
+    // transform(code, id) {
+    //   if (!id.includes('submissionRecord')) return
+    //   if (!filter(id)) return; // 如果不是 .svelte 文件，直接返回
+    //   console.log(parse(code, 111111));
+    //   return null
+    // }
     // handleHotUpdate({ file, server, modules, timestamp }) {
     //   // console.log('handleHotUpdate', file, server, modules, timestamp);
     // }

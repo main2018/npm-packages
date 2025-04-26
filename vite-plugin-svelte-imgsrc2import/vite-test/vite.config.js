@@ -31,6 +31,10 @@ export default defineConfig({
     }),
     svelte({
       configFile: resolve(__dirname, "./svelte.config.js"),
+      onwarn: (warning, handler) => {
+        if (warning.code === 'css-unused-selector') return; // 忽略 CSS 未使用的选择器警告
+        handler(warning);
+      }
     }),
     imgSrcToImport({
       include: '**/*.svelte', // 处理所有 .svelte 文件

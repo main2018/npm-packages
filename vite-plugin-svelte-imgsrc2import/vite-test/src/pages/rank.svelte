@@ -1,6 +1,7 @@
 <div class="rank">
   rank
-  <img src={!info?.gift_type ? `../assets/gold_big.png` : info?.icon} alt="">
+  <img src={a < 3 ? `../assets/guide${a}.png` : '../assets/gold_big.png'} alt="">
+  <img src={!info?.gift_type ? `../assets/guide${a}.png` : info?.gift_type === 1 ? '../assets/gold_big.png' : info?.icon ? info?.icon : `../assets/num-font.png`} alt="">
   <img src="../assets/bg_pk.png"/>
 
   rank-end----------
@@ -8,10 +9,11 @@
 <script>
   import { onMount } from 'svelte';
   
-  let info = {
+  const a = 4
+  let info = $state({
     gift_type: 0,
     icon: '../assets/num-font.png'
-  };
+  });
   onMount(() => {
     
   });
